@@ -13,6 +13,9 @@ jobs:
     - name: Start embed API
       run: docker compose up -d --build --wait
 
+    - name: Build PHP metadata extractor
+      run: docker compose build php-metadata
+
     - name: Run tests
       run: bash run_tests.sh
 

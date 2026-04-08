@@ -8,3 +8,8 @@ services:
       interval: 2s
       timeout: 5s
       retries: 15
+
+  php-metadata:
+    build: ./php-metadata
+    volumes:
+      - .:/project:ro

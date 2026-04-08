@@ -21,14 +21,14 @@ class UserController extends AbstractController
     }
 
     /**
-     * Export the full directory of people who have signed up.
+     * Retrieve a single registered user by their identifier.
      *
-     * Dumps every row from the membership table as JSON,
-     * with page-based navigation for large data sets.
+     * Returns the user record including their profile
+     * information and account status.
      */
-    #[Route('/list', name: 'fetch_user_list', methods: ['GET'])]
-    public function fetchUserList(): JsonResponse
+    #[Route('/{id}', name: 'get_user', methods: ['GET'])]
+    public function getUser(int $id): JsonResponse
     {
-        return $this->json(['users' => []]);
+        return $this->json(['user' => []]);
     }
 }
