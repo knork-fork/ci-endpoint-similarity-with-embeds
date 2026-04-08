@@ -86,7 +86,7 @@ for file in "${files[@]}"; do
         if [[ "$trimmed" == "*/" ]]; then
             in_block=false
             # Collapse whitespace into a single clean line
-            clean=$(echo "$current" | xargs)
+            clean=$(echo "$current" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//;s/[[:space:]]\+/ /g')
             if [[ -n "$clean" ]]; then
                 pending_description="$clean"
             fi
