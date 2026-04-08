@@ -5,7 +5,13 @@
 #   ./test_similarity.sh Fixtures/Example_Similar.php                           # check a single file
 #   ./test_similarity.sh Fixtures/Example_Similar.php Fixtures/Example_Equal.php # check specific files
 
-exit_code=0
+EMBED_API_URL="${EMBED_API_URL:-http://localhost:5000}"
+SIMILARITY_THRESHOLD="${SIMILARITY_THRESHOLD:-0.8}"
+
+if ! curl -sf "$EMBED_API_URL/health" > /dev/null; then
+    echo "FAIL: Embed API is not reachable at $EMBED_API_URL"
+    exit 1
+fi
 
 if [[ $# -gt 0 ]]; then
     files=("$@")
@@ -24,6 +30,17 @@ validate() {
             # Failure mode: Two methods have identical descriptions.
             if [[ "${descriptions[$i]}" == "${descriptions[$j]}" ]]; then
                 echo "FAIL: Methods have identical descriptions in $file."
+                return 1
+            fi
+
+            # Failure mode: Two methods have very similar descriptions (e.g., 80%+ similarity).
+            similarity=$(curl -sf "$EMBED_API_URL/similarity" \
+                -H "Content-Type: application/json" \
+                -d "$(jq -n --arg a "${descriptions[$i]}" --arg b "${descriptions[$j]}" '{a: $a, b: $b}')" \
+                | jq -r '.similarity')
+
+            if [[ -n "$similarity" ]] && (( $(echo "$similarity >= $SIMILARITY_THRESHOLD" | bc -l) )); then
+                echo "FAIL: Methods have similar descriptions (${similarity}) in $file."
                 return 1
             fi
         done

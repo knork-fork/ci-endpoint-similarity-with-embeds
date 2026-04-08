@@ -10,5 +10,12 @@ jobs:
     - uses: actions/checkout@v2
       name: Checkout latest commit
 
+    - name: Start embed API
+      run: docker compose up -d --build --wait
+
     - name: Run tests
       run: bash run_tests.sh
+
+    - name: Stop embed API
+      if: always()
+      run: docker compose down

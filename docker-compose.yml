@@ -1,0 +1,10 @@
+services:
+  embed-api:
+    build: ./embed-api
+    ports:
+      - "5000:5000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 2s
+      timeout: 5s
+      retries: 15
