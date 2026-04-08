@@ -18,7 +18,7 @@ for file in "$FIXTURES_DIR"/Failing/*.php; do
         passed=$((passed + 1))
     else
         failed=$((failed + 1))
-        failed_tests+=("$filename")
+        failed_tests+=("$filename (expected failure but got OK)")
     fi
 done
 
@@ -32,7 +32,7 @@ for file in "$FIXTURES_DIR"/Passing/*.php; do
         passed=$((passed + 1))
     else
         failed=$((failed + 1))
-        failed_tests+=("$filename")
+        failed_tests+=("$filename (expected OK but got failure)")
     fi
 done
 
@@ -40,7 +40,7 @@ echo "Total: $total | Passed: $passed | Failed: $failed"
 
 if [[ $failed -gt 0 ]]; then
     for t in "${failed_tests[@]}"; do
-        echo "  FAIL: $t (expected failure but got OK)"
+        echo "  FAIL: $t"
     done
     exit 1
 fi
