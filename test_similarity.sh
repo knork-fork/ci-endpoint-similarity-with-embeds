@@ -1,7 +1,6 @@
 #!/bin/bash
 #
 # Usage:
-#   ./test_similarity.sh                                                        # check all files in Fixtures/
 #   ./test_similarity.sh Fixtures/Example_Similar.php                           # check a single file
 #   ./test_similarity.sh Fixtures/Example_Similar.php Fixtures/Example_Equal.php # check specific files
 #   ./test_similarity.sh --verbose Fixtures/Example_Similar.php                  # print similarity scores
@@ -12,6 +11,11 @@ if [[ "$1" == "--verbose" ]]; then
     shift
 fi
 
+if [[ $# -eq 0 ]]; then
+    echo "Usage: $0 [--verbose] <file> [file ...]"
+    exit 1
+fi
+
 EMBED_API_URL="${EMBED_API_URL:-http://localhost:5000}"
 SIMILARITY_THRESHOLD="${SIMILARITY_THRESHOLD:-0.8}"
 
@@ -20,12 +24,7 @@ if ! curl -sf "$EMBED_API_URL/health" > /dev/null; then
     exit 1
 fi
 
-if [[ $# -gt 0 ]]; then
-    files=("$@")
-else
-    FIXTURES_DIR="$(dirname "$0")/Fixtures"
-    files=("$FIXTURES_DIR"/*.php)
-fi
+files=("$@")
 
 validate() {
     local file="$1"
