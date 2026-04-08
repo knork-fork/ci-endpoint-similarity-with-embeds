@@ -3,7 +3,7 @@ from sentence_transformers import SentenceTransformer
 import numpy as np
 
 app = Flask(__name__)
-model = SentenceTransformer("all-MiniLM-L6-v2")
+model = SentenceTransformer("nomic-ai/nomic-embed-text-v1.5")
 
 
 @app.route("/embed", methods=["POST"])
