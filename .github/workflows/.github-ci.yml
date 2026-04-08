@@ -1,0 +1,14 @@
+name: CI
+
+on: push
+
+jobs:
+  commit-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      name: Checkout latest commit
+
+    - name: Run tests
+      run: bash run_tests.sh
