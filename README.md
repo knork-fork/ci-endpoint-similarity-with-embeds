@@ -22,6 +22,12 @@ Or check specific files:
 bash test_similarity.sh Fixtures/Example_Similar.php
 ```
 
+Verbose mode prints similarity scores for all pairs, including passing ones:
+
+```bash
+bash test_similarity.sh --verbose src/**/*.php
+```
+
 ## Teardown
 
 ```bash
